@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Table } from 'react-bootstrap';
 import './App.css';
 
 class App extends Component {
@@ -18,11 +19,26 @@ class App extends Component {
     return (
       <div>
         <button onClick={() => this.getOffers('Crystal')}>Get Offers</button>
-        <ul>
-        {this.state.offers.map(offer => (
-          <li key={offer.id}>{offer.name}</li>
-        ))}
-      </ul>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Expiration</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.offers.map(offer => (
+              <tr key={offer.id}>
+                <td key={offer.id}>{offer.id}</td>
+                <td key={offer.name}>{offer.name}</td>
+                <td key={offer.description}>{offer.description}</td>
+                <td key={offer.expiration}>{offer.expiration}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
