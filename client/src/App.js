@@ -1,45 +1,44 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-import { Table } from 'react-bootstrap';
+import { CardColumns } from 'react-bootstrap';
 import './App.css';
+import Card from './Card';
+import Nav from './Nav';
 
 class App extends Component {
-  state = {
-    offers: []
+  constructor(props) {
+    super(props);
+    this.state = { offers: [] };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  getOffers(q) {
+  handleSubmit(e, q) {
+    e.preventDefault();
     axios.get(`api/offers?q=${q}`).then(res => {
-      console.log("RES: ", res.data);
       this.setState(() => ({ offers: res.data }))
     })
   }
 
   render() {
     return (
-      <div>
-        <button onClick={() => this.getOffers('Crystal')}>Get Offers</button>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Expiration</th>
-            </tr>
-          </thead>
-          <tbody>
+      <Fragment>
+        <Nav 
+          handleSubmit={this.handleSubmit}
+        />
+        <CardColumns>
             {this.state.offers.map(offer => (
-              <tr key={offer.id}>
-                <td key={offer.id}>{offer.id}</td>
-                <td key={offer.name}>{offer.name}</td>
-                <td key={offer.description}>{offer.description}</td>
-                <td key={offer.expiration}>{offer.expiration}</td>
-              </tr>
+              <Card 
+                key={offer.id}
+                id={offer.id}
+                name={offer.name}
+                description={offer.description}
+                expiration={offer.expiration}
+                terms={offer.terms}
+                imageURL={offer.image_url}
+              /> 
             ))}
-          </tbody>
-        </Table>
-      </div>
+        </CardColumns>
+      </Fragment>
     );
   }
 }
