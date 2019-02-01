@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { CardColumns } from 'react-bootstrap';
 import './App.css';
-import Card from './Card';
+import OfferCard from './Card';
 import Nav from './Nav';
 
 class App extends Component {
@@ -27,7 +27,7 @@ class App extends Component {
         />
         <CardColumns>
             {this.state.offers.map(offer => (
-              <Card 
+              <OfferCard 
                 key={offer.id}
                 id={offer.id}
                 name={offer.name}

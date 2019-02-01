@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import { Card } from 'react-bootstrap';
+import CardModal from './CardModal';
 
-var Test = ({ id, name, description, expiration, terms, imageURL }) => {
+var OfferCard = ({ id, name, description, expiration, terms, imageURL }) => {
   return (
     <Fragment>
       <Card>
-        <Card.Img variant="top" src={imageURL} />
+        <Card.Img fluid variant="top" src={imageURL} />
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>
@@ -20,4 +21,4 @@ var Test = ({ id, name, description, expiration, terms, imageURL }) => {
   )
 }
 
-export default Test;
+export default OfferCard;
