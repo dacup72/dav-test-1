@@ -7,7 +7,7 @@ class OffersController < ApplicationController
     else
       render(
         status: 200,
-        json: Offer.where(["name LIKE ?", "%#{q}%"]).limit(100)
+        json: Offer.where(["name LIKE ?", "%#{q}%"]).all
       )
     end 
   end
@@ -17,7 +17,7 @@ class OffersController < ApplicationController
 
       render(
         status: 200,
-        json: Offer.joins(:retailer_offers).where(retailer_offers: { retailer_id: "#{r}"})
+        json: Offer.joins(:retailer_offers).where(retailer_offers: { retailer_id: "#{r}"}).where(["name LIKE ?", "%#{q}%"]).all
       )
   end
 end

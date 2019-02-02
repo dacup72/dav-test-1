@@ -15,7 +15,7 @@ class Nav extends Component {
     super(props);
     this.state = {
       searchInput: "",
-      searchRetailer: "",
+      searchRetailer: "all",
       retailerOptions: []
     };
     this.handleChange = this.handleChange.bind(this);
@@ -47,7 +47,7 @@ class Nav extends Component {
             <Form.Control as="select" name="searchRetailer" onChange={this.handleChange}>
               <option value="all">All Retailers</option>
               {this.state.retailerOptions.length && this.state.retailerOptions.map(({ id, name }) => (
-                <option value={id}>{name}</option>
+                <option key={id} value={id}>{name}</option>
               ))}
             </Form.Control>
           </Form.Group>

@@ -22,9 +22,8 @@ class App extends Component {
 
   handleSubmit(e, { searchInput, searchRetailer }) {
     e.preventDefault();
-
     if(searchRetailer === "all") {
-      axios.get(`/api/offers?q=${searchInput}`).then(res => {
+      axios.get(`/api/offerByName?q=${searchInput}`).then(res => {
         this.setState(() => ({ offers: res.data }))
       })
     } 

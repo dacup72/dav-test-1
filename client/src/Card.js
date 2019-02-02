@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react';
 import { Card } from 'react-bootstrap';
 import CardModal from './CardModal';
+import './App.css';
 
 var OfferCard = ({ id, name, description, expiration, terms, imageURL }) => {
   return (
     <Fragment>
       <Card>
-        <Card.Img fluid variant="top" src={imageURL} />
+        <div className="card-image-container">
+          <img src={imageURL} alt={name} />
+        </div>
         <Card.Body>
           <Card.Title>{name}</Card.Title>
           <Card.Text>

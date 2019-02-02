@@ -1,0 +1,13 @@
+.card-image {
+   height: auto;
+   width: 100%;
+}
+
+.card-image-container {
+  height: 20em; 
+  width: auto; 
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
