@@ -1,5 +1,5 @@
 class OffersController < ApplicationController
-  def index
+  def getByName
     q = params[:q]
     
     if q.blank?

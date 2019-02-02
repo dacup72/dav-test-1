@@ -17,6 +17,7 @@ class App extends Component {
     // axios.get(`api/offers?q=${q}`).then(res => {
     //   this.setState(() => ({ offers: res.data }))
     // })
+    console.log(e)
     axios.get(`api/testJoin`).then(res => {
       console.log("TEST: ", res.data)
       //this.setState(() => ({ offers: res.data }))
