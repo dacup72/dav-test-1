@@ -14,8 +14,12 @@ class App extends Component {
 
   handleSubmit(e, q) {
     e.preventDefault();
-    axios.get(`api/offers?q=${q}`).then(res => {
-      this.setState(() => ({ offers: res.data }))
+    // axios.get(`api/offers?q=${q}`).then(res => {
+    //   this.setState(() => ({ offers: res.data }))
+    // })
+    axios.get(`api/testJoin`).then(res => {
+      console.log("TEST: ", res.data)
+      //this.setState(() => ({ offers: res.data }))
     })
   }
 
