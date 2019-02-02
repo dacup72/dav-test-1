@@ -5,6 +5,14 @@ import './App.css';
 import OfferCard from './Card';
 import Nav from './Nav';
 
+const removeArrayDuplicates = arr => {
+  return arr.map(e => e["id"])
+    // store the keys of the unique objects
+    .map((e, i, final) => final.indexOf(e) === i && i)
+    // eliminate the dead keys & store unique objects
+    .filter(e => arr[e]).map(e => arr[e])
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -12,16 +20,20 @@ class App extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e, q) {
+  handleSubmit(e, { searchInput, searchRetailer }) {
     e.preventDefault();
-    // axios.get(`api/offers?q=${q}`).then(res => {
-    //   this.setState(() => ({ offers: res.data }))
-    // })
-    console.log(e)
-    axios.get(`api/testJoin`).then(res => {
-      console.log("TEST: ", res.data)
-      //this.setState(() => ({ offers: res.data }))
-    })
+
+    if(searchRetailer === "all") {
+      axios.get(`/api/offers?q=${searchInput}`).then(res => {
+        this.setState(() => ({ offers: res.data }))
+      })
+    } 
+    else {
+      axios.get(`/api/getOffersByRetailer?q=${searchInput}&r=${searchRetailer}`).then(res => {
+        const uniqueOffers = removeArrayDuplicates(res.data);
+        this.setState(() => ({ offers: uniqueOffers }));
+      })
+    }
   }
 
   render() {

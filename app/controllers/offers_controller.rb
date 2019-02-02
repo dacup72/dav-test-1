@@ -11,11 +11,13 @@ class OffersController < ApplicationController
       )
     end 
   end
+  def getOffersByRetailerId
+      q = params[:q]
+      r = params[:r]
 
-  def testJoin
       render(
         status: 200,
-        json: Offer.joins(:retailer_offers).where(retailer_offers: { retailer_id: 3 })
+        json: Offer.joins(:retailer_offers).where(retailer_offers: { retailer_id: "#{r}"})
       )
   end
 end

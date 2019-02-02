@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
 import Axios from 'axios';
 
+const removeArrayDuplicates = arr => {
+  return arr.map(e => e["id"])
+    // store the keys of the unique objects
+    .map((e, i, final) => final.indexOf(e) === i && i)
+    // eliminate the dead keys & store unique objects
+    .filter(e => arr[e]).map(e => arr[e])
+};
+
 class Nav extends Component {
   constructor(props) {
     super(props);
@@ -19,14 +27,13 @@ class Nav extends Component {
 
   handleChange(e) {
     const { name, value } = e.target;
-    console.log(name, " : ", value)
     this.setState(() => ({ [name]: value }));
   }
 
   generateRetailerOptions() {
     Axios.get('/api/allRetailers').then(res => {
-      console.log(res.data);
-      this.setState(() => ({ retailerOptions: res.data }))
+      const uniqueRetailers = removeArrayDuplicates(res.data);
+      this.setState(() => ({ retailerOptions: uniqueRetailers }));
     });
   }
 
@@ -34,12 +41,12 @@ class Nav extends Component {
     return (
       <Navbar className="bg-light justify-content-between">
         <Navbar.Brand>iBotta</Navbar.Brand>
-        <Form inline onSubmit={(e) => this.props.handleSubmit(e, this.state.searchInput)}>
+        <Form inline onSubmit={(e) => this.props.handleSubmit(e, { searchInput: this.state.searchInput, searchRetailer: this.state.searchRetailer })}>
           <Form.Group controlId="selectRetailer.ControlSelect1">
             <Form.Label>Select Retailer</Form.Label>
             <Form.Control as="select" name="searchRetailer" onChange={this.handleChange}>
-              <option>All Retailers</option>
-              {this.state.retailerOptions.map(({ id, name }) => (
+              <option value="all">All Retailers</option>
+              {this.state.retailerOptions.length && this.state.retailerOptions.map(({ id, name }) => (
                 <option value={id}>{name}</option>
               ))}
             </Form.Control>
