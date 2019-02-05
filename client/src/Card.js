@@ -1,26 +1,21 @@
 import React, { Fragment } from 'react';
 import { Card } from 'react-bootstrap';
 import CardModal from './CardModal';
-import './App.css';
 
-var OfferCard = ({ id, name, description, expiration, terms, imageURL }) => {
+const OfferCard = ({ id, name, description, expiration, terms, imageURL, handleModalOpen }) => {
   return (
-    <Fragment>
-      <Card>
-        <div className="card-image-container">
-          <img src={imageURL} alt={name} />
-        </div>
-        <Card.Body>
-          <Card.Title>{name}</Card.Title>
-          <Card.Text>
-            {description}
-          </Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <small className="text-muted">{expiration}</small>
-        </Card.Footer>
-      </Card>
-    </Fragment>
+    <Card className="card-container" onClick={() => handleModalOpen({ name, description, terms, imageURL })}>
+      <Card.Img variant="top" className="card-image" src={imageURL} />
+      <Card.Body>
+        <Card.Title>{name}</Card.Title>
+        <Card.Text>
+          {description}
+        </Card.Text>
+      </Card.Body>
+      <Card.Footer >
+        <small className="text-muted">{expiration}</small>
+      </Card.Footer>
+    </Card>
   )
 }
 
