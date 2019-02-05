@@ -8,10 +8,14 @@ const CardModal = ({ name, description, image, terms, showModal, handleModalClos
       show={showModal}
       onHide={handleModalClose}
     >
+   
       <Modal.Header closeButton>
         <Modal.Title>{name}</Modal.Title>
       </Modal.Header>
+      <hr />
+      <img src={image} alt={name} className="card-image" />
       <Modal.Body>{description}</Modal.Body>
+      <Modal.Footer>{terms}</Modal.Footer>
     </Modal>
   )
 }

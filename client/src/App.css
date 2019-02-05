@@ -1,6 +1,10 @@
 .card-image {
+  object-fit: contain;
   height: 15em;
+  padding-top: 1%;
 }
+
+
 
 .main-nav {
   margin-bottom: 2em;

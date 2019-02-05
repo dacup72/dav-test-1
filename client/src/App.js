@@ -39,6 +39,7 @@ class App extends Component {
     super(props);
     this.state = {
       offers: [],
+      offerClicks: {},
       modal: {},
       showModal: false
     };
@@ -65,9 +66,13 @@ class App extends Component {
     }
   }
 
-  handleModalOpen(content) {
+  handleModalOpen(content) { 
+    var newClick = this.state.offerClicks;
+    newClick[content.id] = content.views + 1;
+
     this.setState(() => ({
-      modal: content,
+      offerClicks: newClick,
+      modal: content, 
       showModal: true
     }))
   }
@@ -109,6 +114,7 @@ class App extends Component {
                 terms={offer.terms}
                 imageURL={offer.image_url}
                 handleModalOpen={this.handleModalOpen}
+                views={this.state.offerClicks[offer.id] ? this.state.offerClicks[offer.id] : 0}
               />
             ))}
           </CardDeck>
