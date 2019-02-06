@@ -1,3 +1,26 @@
+
+STARTING THE APPLICATION
+---
+Command Line Steps: 
+
+1. cd [project_directory]
+2. rbenv install 2.5.3
+3. rbenv rehash
+4. gem install bundler
+
+5. bundle install
+6. rake db:migrate
+7. rake db:test:prepare
+8. rake db:seed
+
+9. cd client
+10. npm install
+11. rake start
+
+
+
+
+
 Ibotta Dev Project (Web Engineer)
 =========
 
