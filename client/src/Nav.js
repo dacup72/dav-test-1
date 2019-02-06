@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
-import { Navbar, Form, FormControl, Button, Badge } from 'react-bootstrap';
-import Axios from 'axios';
-
-const removeArrayDuplicates = arr => {
-  return arr.map(e => e["id"])
-    // store the keys of the unique objects
-    .map((e, i, final) => final.indexOf(e) === i && i)
-    // eliminate the dead keys & store unique objects
-    .filter(e => arr[e]).map(e => arr[e])
-};
+import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
+import Helpers from './Utils/Helpers';
+import API from './Utils/API';
 
 class Nav extends Component {
   constructor(props) {
@@ -31,8 +24,8 @@ class Nav extends Component {
   }
 
   generateRetailerOptions() {
-    Axios.get('/api/allRetailers').then(res => {
-      const uniqueRetailers = removeArrayDuplicates(res.data);
+    API.getAllRetailers().then(res => {
+      const uniqueRetailers = Helpers.removeArrayDuplicates(res.data);
       this.setState(() => ({ retailerOptions: uniqueRetailers }));
     });
   }

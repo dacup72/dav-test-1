@@ -1,46 +1,10 @@
-import React, { Component, Fragment } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react';
 import { CardDeck, Container, Card } from 'react-bootstrap';
 import OfferCard from './Card';
 import Nav from './Nav';
 import CardModal from './CardModal';
-
-const removeOfferDuplicates = arr => {
-  const unique = [];
-  arr.map(x => unique.filter(a => a.description == x.description && a.name == x.name && a.terms == x.terms).length > 0
-    ? null
-    : unique.push(x)
-  );
-  return unique;
-};
-
-const removeRetailerDuplicates = arr => {
-  const unique = [];
-  arr.map(x => unique.filter(a => a.retailer_id == x.retailer_id && a.offer_id == x.offer_id).length > 0
-    ? null
-    : unique.push(x)
-  );
-  return unique;
-};
-
-const groupOffers = arr => {
-  let result = [];
-  let newArr = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (newArr.length === 3) {
-      result.push(newArr);
-      newArr = [];
-    }
-    else if (i === arr.length - 1) {
-      newArr.push(arr[i]);
-      result.push(newArr);
-    }
-    else {
-      newArr.push(arr[i]);
-    }
-  }
-  return result;
-}
+import Helpers from './Utils/Helpers';
+import API from './Utils/API';
 
 class App extends Component {
   constructor(props) {
@@ -59,10 +23,9 @@ class App extends Component {
   }
 
   componentWillMount() {
-    axios.get('/api/allRetailersOfferIds').then(res1 => {
-      axios.get('/api/allRetailers').then(res2 => {
-        var cleanRetailerOfferArray = removeRetailerDuplicates(res1.data);
-
+    API.getRetailersOffers().then(res1 => {
+      API.getAllRetailers().then(res2 => {
+        var cleanRetailerOfferArray = Helpers.removeRetailerDuplicates(res1.data);
         // Create one object from retailer array
         var retailIds = {};
         res2.data.map(({ id, name }) => {
@@ -90,16 +53,16 @@ class App extends Component {
   handleSubmit(e, { searchInput, searchRetailer }) {
     e.preventDefault();
     if (searchRetailer === "all") {
-      axios.get(`/api/offerByName?q=${searchInput}`).then(res => {
-        const uniqueOffers = removeOfferDuplicates(res.data);
-        const result = groupOffers(uniqueOffers);
+      API.getOffersByName(searchInput).then(res => {
+        const uniqueOffers = Helpers.removeOfferDuplicates(res.data);
+        const result = Helpers.groupOffers(uniqueOffers);
         this.setState(() => ({ offers: result }))
       })
     }
     else {
-      axios.get(`/api/getOffersByRetailer?q=${searchInput}&r=${searchRetailer}`).then(res => {
-        const uniqueOffers = removeOfferDuplicates(res.data);
-        const result = groupOffers(uniqueOffers);
+      API.getOffersByRetailer(searchInput, searchRetailer).then(res => {
+        const uniqueOffers = Helpers.removeOfferDuplicates(res.data);
+        const result = Helpers.groupOffers(uniqueOffers);
         this.setState(() => ({ offers: result }));
       })
     }
@@ -128,6 +91,7 @@ class App extends Component {
         <Nav
           handleSubmit={this.handleSubmit}
         />
+
         {this.state.offers.length > 0 ? this.state.offers.map((offerGroup, i) => (
           <CardDeck className="card-deck-container" key={i}>
             {offerGroup.map(offer => (
@@ -145,11 +109,12 @@ class App extends Component {
               />
             ))}
           </CardDeck>
-        )) :
+        )) : (
           <Card bg="danger">
             <Card.Title className="message-card">No available offer based on this search criteria</Card.Title>
           </Card>
-        }
+        )}
+
         <CardModal
           image={this.state.modal.imageURL}
           name={this.state.modal.name}
