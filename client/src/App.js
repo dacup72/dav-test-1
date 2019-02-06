@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import { CardDeck } from 'react-bootstrap';
+import { CardDeck, Container } from 'react-bootstrap';
 import OfferCard from './Card';
 import Nav from './Nav';
 import CardModal from './CardModal';
@@ -40,12 +40,40 @@ class App extends Component {
     this.state = {
       offers: [],
       offerClicks: {},
+      retailers: {},
       modal: {},
       showModal: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+  }
+
+  componentWillMount() {
+    axios.get('/api/allRetailersOfferIds').then(res1 => {
+      axios.get('/api/allRetailers').then(res2 => {
+        // Create one object from retailer array
+        var retailIds = {};
+        res2.data.map(({ id, name }) => {
+          retailIds[id] = name;
+        });
+
+        // Create object with retailer names and offer ids matched up
+        var result = {}
+        res1.data.forEach(bothIds => {
+          if (result[bothIds.offer_id]) {
+            result[bothIds.offer_id] = result[bothIds.offer_id] + `, ${retailIds[bothIds.retailer_id]}`;
+          }
+          else {
+            result[bothIds.offer_id] = retailIds[bothIds.retailer_id];
+          }
+        });
+
+        this.setState(() => ({
+          retailers: result
+        }));
+      });
+    });
   }
 
   handleSubmit(e, { searchInput, searchRetailer }) {
@@ -66,13 +94,13 @@ class App extends Component {
     }
   }
 
-  handleModalOpen(content) { 
+  handleModalOpen(content) {
     var newClick = this.state.offerClicks;
     newClick[content.id] = content.views + 1;
 
     this.setState(() => ({
       offerClicks: newClick,
-      modal: content, 
+      modal: content,
       showModal: true
     }))
   }
@@ -83,27 +111,14 @@ class App extends Component {
     }))
   }
 
-  renderModal() {
-    return (
-      <CardModal
-        image={this.state.modal.imageURL}
-        name={this.state.modal.name}
-        description={this.state.modal.description}
-        terms={this.state.modal.terms}
-        handleModalClose={this.handleModalClose}
-        showModal={this.state.showModal}
-      />
-    )
-  }
-
   render() {
     return (
-      <Fragment>
+      <Container>
         <Nav
           handleSubmit={this.handleSubmit}
         />
-        {this.state.offers.map(offerGroup => (
-          <CardDeck className="card-deck-container">
+        {this.state.offers.map((offerGroup, i) => (
+          <CardDeck className="card-deck-container" key={i}>
             {offerGroup.map(offer => (
               <OfferCard
                 key={offer.id}
@@ -115,12 +130,20 @@ class App extends Component {
                 imageURL={offer.image_url}
                 handleModalOpen={this.handleModalOpen}
                 views={this.state.offerClicks[offer.id] ? this.state.offerClicks[offer.id] : 0}
+                retailerGroup={this.state.retailers[offer.id]}
               />
             ))}
           </CardDeck>
         ))}
-        {this.state.showModal ? this.renderModal() : null}
-      </Fragment>
+        <CardModal
+          image={this.state.modal.imageURL}
+          name={this.state.modal.name}
+          description={this.state.modal.description}
+          terms={this.state.modal.terms}
+          handleModalClose={this.handleModalClose}
+          showModal={this.state.showModal}
+        />
+      </Container>
     );
   }
 }

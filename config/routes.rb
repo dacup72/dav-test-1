@@ -4,5 +4,6 @@ Rails.application.routes.draw do
     get :offerByName, to: 'offers#getByName'
     get :getOffersByRetailer, to: 'offers#getOffersByRetailerId'
     get :allRetailers, to: 'retailers#getAll'
+    get :allRetailersOfferIds, to: 'retailers#getAllIds'
   end
 end

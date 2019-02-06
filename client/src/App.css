@@ -4,18 +4,17 @@
   padding-top: 1%;
 }
 
-
-
 .main-nav {
   margin-bottom: 2em;
 }
 
 .card-deck-container {
-  margin: 2em;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 body {
-  background-color: beige;
+  background-color: dimgray;
 }
 
 .retailer-dropdown {

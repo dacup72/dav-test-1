@@ -3,12 +3,7 @@ import { Modal } from 'react-bootstrap';
 
 const CardModal = ({ name, description, image, terms, showModal, handleModalClose }) => {
   return (
-    <Modal
-      size="lg"
-      show={showModal}
-      onHide={handleModalClose}
-    >
-   
+    <Modal size="lg" show={showModal} onHide={handleModalClose}>
       <Modal.Header closeButton>
         <Modal.Title>{name}</Modal.Title>
       </Modal.Header>
