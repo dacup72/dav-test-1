@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Form, FormControl, Button, Badge } from 'react-bootstrap';
 import Axios from 'axios';
 
 const removeArrayDuplicates = arr => {
@@ -40,10 +40,10 @@ class Nav extends Component {
   render() {
     return (
       <Navbar className="bg-light justify-content-between main-nav">
-        <Navbar.Brand>iBotta Offer Display</Navbar.Brand>
+        <Navbar.Brand className="nav-brand">iBotta Offer Display</Navbar.Brand>
         <Form inline onSubmit={(e) => this.props.handleSubmit(e, { searchInput: this.state.searchInput, searchRetailer: this.state.searchRetailer })}>
           <Form.Group controlId="selectRetailer.ControlSelect1" className="retailer-dropdown">
-            <Form.Label>Select Retailer</Form.Label>
+            <Form.Label className="offer-form-label">Select Retailer</Form.Label>
             <Form.Control as="select" name="searchRetailer" onChange={this.handleChange}>
               <option value="all">All Retailers</option>
               {this.state.retailerOptions.length && this.state.retailerOptions.map(({ id, name }) => (
@@ -51,8 +51,9 @@ class Nav extends Component {
               ))}
             </Form.Control>
           </Form.Group>
+          <Form.Label className="offer-form-label">Product Name</Form.Label>
+          <FormControl type="text" placeholder="Product Name" className="mr-sm-2" name="searchInput" onChange={this.handleChange} />
           <Button type="submit">Search</Button>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" name="searchInput" onChange={this.handleChange} />
         </Form>
       </Navbar>
     )

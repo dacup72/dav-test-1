@@ -6,9 +6,18 @@ import Nav from './Nav';
 import CardModal from './CardModal';
 
 
-const removeArrayDuplicates = arr => {
+const removeOfferDuplicates = arr => {
   const unique = [];
   arr.map(x => unique.filter(a => a.description == x.description && a.name == x.name && a.terms == x.terms).length > 0
+    ? null
+    : unique.push(x)
+  );
+  return unique;
+};
+
+const removeRetailerDuplicates = arr => {
+  const unique = [];
+  arr.map(x => unique.filter(a => a.retailer_id == x.retailer_id && a.offer_id == x.offer_id).length > 0
     ? null
     : unique.push(x)
   );
@@ -52,6 +61,8 @@ class App extends Component {
   componentWillMount() {
     axios.get('/api/allRetailersOfferIds').then(res1 => {
       axios.get('/api/allRetailers').then(res2 => {
+        var cleanRetailerOfferArray = removeRetailerDuplicates(res1.data);
+
         // Create one object from retailer array
         var retailIds = {};
         res2.data.map(({ id, name }) => {
@@ -60,7 +71,7 @@ class App extends Component {
 
         // Create object with retailer names and offer ids matched up
         var result = {}
-        res1.data.forEach(bothIds => {
+        cleanRetailerOfferArray.forEach(bothIds => {
           if (result[bothIds.offer_id]) {
             result[bothIds.offer_id] = result[bothIds.offer_id] + `, ${retailIds[bothIds.retailer_id]}`;
           }
@@ -80,14 +91,14 @@ class App extends Component {
     e.preventDefault();
     if (searchRetailer === "all") {
       axios.get(`/api/offerByName?q=${searchInput}`).then(res => {
-        const uniqueOffers = removeArrayDuplicates(res.data);
+        const uniqueOffers = removeOfferDuplicates(res.data);
         const result = groupOffers(uniqueOffers);
         this.setState(() => ({ offers: result }))
       })
     }
     else {
       axios.get(`/api/getOffersByRetailer?q=${searchInput}&r=${searchRetailer}`).then(res => {
-        const uniqueOffers = removeArrayDuplicates(res.data);
+        const uniqueOffers = removeOfferDuplicates(res.data);
         const result = groupOffers(uniqueOffers);
         this.setState(() => ({ offers: result }));
       })
@@ -140,6 +151,9 @@ class App extends Component {
           name={this.state.modal.name}
           description={this.state.modal.description}
           terms={this.state.modal.terms}
+          expiration={this.state.modal.expiration}
+          views={this.state.modal.views}
+          retailerGroup={this.state.modal.retailerGroup}
           handleModalClose={this.handleModalClose}
           showModal={this.state.showModal}
         />
