@@ -8,11 +8,13 @@ const OfferCard = ({ id, name, description, expiration, terms, imageURL, handleM
       <Card.Body>
         <Card.Title>{name}</Card.Title>
         <hr />
-        <Card.Text><h6>Details: </h6>{description}</Card.Text>
-        
+        <strong>Details: </strong>
+        <Card.Text>
+          {description}
+        </Card.Text>
       </Card.Body>
       <Card.Footer >
-      <h5><Badge variant="secondary">Offer Views: {views}</Badge></h5>
+        <h5><Badge variant="secondary">Offer Views: {views}</Badge></h5>
         <Card.Text>Click card for more information!</Card.Text>
       </Card.Footer>
     </Card>

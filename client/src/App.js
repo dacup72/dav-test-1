@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-import { CardDeck, Container } from 'react-bootstrap';
+import { CardDeck, Container, Card } from 'react-bootstrap';
 import OfferCard from './Card';
 import Nav from './Nav';
 import CardModal from './CardModal';
-
 
 const removeOfferDuplicates = arr => {
   const unique = [];
@@ -51,7 +50,8 @@ class App extends Component {
       offerClicks: {},
       retailers: {},
       modal: {},
-      showModal: false
+      showModal: false,
+      appLoaded: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleModalOpen = this.handleModalOpen.bind(this);
@@ -66,7 +66,7 @@ class App extends Component {
         // Create one object from retailer array
         var retailIds = {};
         res2.data.map(({ id, name }) => {
-          retailIds[id] = name;
+          return retailIds[id] = name;
         });
 
         // Create object with retailer names and offer ids matched up
@@ -128,7 +128,7 @@ class App extends Component {
         <Nav
           handleSubmit={this.handleSubmit}
         />
-        {this.state.offers.map((offerGroup, i) => (
+        {this.state.offers.length > 0 ? this.state.offers.map((offerGroup, i) => (
           <CardDeck className="card-deck-container" key={i}>
             {offerGroup.map(offer => (
               <OfferCard
@@ -145,7 +145,11 @@ class App extends Component {
               />
             ))}
           </CardDeck>
-        ))}
+        )) :
+          <Card bg="danger">
+            <Card.Title className="message-card">No available offer based on this search criteria</Card.Title>
+          </Card>
+        }
         <CardModal
           image={this.state.modal.imageURL}
           name={this.state.modal.name}

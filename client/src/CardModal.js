@@ -24,7 +24,7 @@ const CardModal = ({ name, description, image, terms, expiration, showModal, han
           }
         </ul>
       </Modal.Body>
-      <Modal.Footer variant="secondary" class="modal-footer">
+      <Modal.Footer variant="secondary" className="modal-footer">
         <h4><Badge variant="secondary">Views: {views + 1}</Badge></h4>
         <span><h4>Expiration Date: </h4><Moment date={expiration} /></span>
       </Modal.Footer>
